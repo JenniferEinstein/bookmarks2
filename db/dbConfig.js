@@ -8,6 +8,8 @@ const cn = {
   user: process.env.PG_USER,
 };
 
+// cn is short for connection
+
 const db = pgp(cn);
 
 module.exports = db;
