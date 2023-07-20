@@ -3,7 +3,8 @@ const bookmarks = express.Router();
 const { 
   getAllBookmarks, 
   getBookmark, 
-  createBookmark 
+  createBookmark, 
+  deleteBookmark
 } = require("../queries/bookmarks");
 const { 
   checkName,
@@ -44,6 +45,17 @@ bookmarks.post("/", checkBoolean, checkName, async (req, res) => {
   }
 });
 
+
+// ========= DELETE ================
+bookmarks.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  const deletedBookmark = await deleteBookmark(id);
+  if (deletedBookmark.id) {
+    res.status(200).json(deletedBookmark);
+  } else {
+    res.status(404).json.apply("Bookmark not found");
+  }
+});
 
 module.exports = bookmarks;
 
