@@ -27,9 +27,7 @@ const getBookmark = async (id) => {
 };
 
 
-
-//CREATE NEW BOOKMARK/s
-
+//  CREATE NEW BOOKMARK/s =================
 
 const createBookmark = async (bookmark) => {
     try {
@@ -43,7 +41,7 @@ const createBookmark = async (bookmark) => {
     }
   };
 
-// DELETE BOOKMARK
+// DELETE BOOKMARK ================
 
 const deleteBookmark = async (id) => {
     try {
@@ -56,18 +54,28 @@ const deleteBookmark = async (id) => {
     }
 };
 
+
+// UPDATE  BOOKMARK ================
+
+const updateBookmark = async (id, bookmark) => {
+    try { const updatedBookmark = await db.one (
+        "UPDATE bookmarks SET name=$1, url=$2, category=$3, is_favorite=$4 WHERE id=$5 RETURNING *",
+        [bookmark.name, bookmark.url, bookmark.category, bookmark.is_favorite, id]
+        );
+        return updatedBookmark;
+    } catch (error) {
+        return error;
+    }
+};
+
 module.exports = {
 getAllBookmarks,
 createBookmark,
 getBookmark,
-deleteBookmark
+deleteBookmark,
+updateBookmark,
 };
 
 
 // Note: with module.exports, we are returning an object because we will return more than one function. Therefore, we will store it in an object.
 
-/* Earlier code that has been replaced:
-    module.exports = { getAllBookmarks };
-
-
-*/

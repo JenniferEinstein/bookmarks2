@@ -4,14 +4,15 @@ const {
   getAllBookmarks, 
   getBookmark, 
   createBookmark, 
-  deleteBookmark
+  deleteBookmark,
+  updateBookmark,
 } = require("../queries/bookmarks");
 const { 
   checkName,
   checkBoolean
  } = require("../validations/checkBookmarks.js");
 
-// INDEX
+// INDEX ================
 bookmarks.get("/", async (req, res) => {
   const allBookmarks = await getAllBookmarks();
   if (allBookmarks[0]) {
@@ -22,7 +23,7 @@ bookmarks.get("/", async (req, res) => {
 });
 
 
-// SHOW
+// SHOW ================
 bookmarks.get("/:id", async (req, res) => {
   const { id } = req.params;
   // SAME AS: const id = req.params.id;
@@ -35,7 +36,7 @@ bookmarks.get("/:id", async (req, res) => {
 });
 
 
-// CREATE
+// CREATE ================
 bookmarks.post("/", checkBoolean, checkName, async (req, res) => {
   try {
     const bookmark = await createBookmark(req.body);
@@ -56,6 +57,14 @@ bookmarks.delete("/:id", async (req, res) => {
     res.status(404).json.apply("Bookmark not found");
   }
 });
+
+
+// UPDATE  ================
+bookmarks.put("/:id", checkName, checkBoolean, async (req, res) => {
+  const { id } = req.params;
+  const updatedBookmark = await updateBookmark(id, req.body); 
+  res.status(200).json(updatedBookmark);
+})
 
 module.exports = bookmarks;
 
